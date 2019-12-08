@@ -1,5 +1,5 @@
 
-# ElasticCTR 2.0 整体架构
+# ElasticCTR整体架构
 
 ![elastic.png](https://github.com/suoych/WebChat/raw/master/overview_v2.png)
 其中各个模块的介绍如下：
