@@ -1,6 +1,6 @@
-# ElasticCTR 2.0
+# ElasticCTR
 
-ElasticCTR 2.0是百度云分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
+ElasticCTR是百度云分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
 
 * [1. 总体概览](#head1)
 * [2. 配置集群](#head2)
