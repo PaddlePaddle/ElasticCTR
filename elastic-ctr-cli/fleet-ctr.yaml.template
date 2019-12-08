@@ -1,0 +1,213 @@
+apiVersion: batch.volcano.sh/v1alpha1
+kind: Job
+metadata:
+  name: fleet-ctr-demo
+spec:
+  minAvailable: <$ TOTAL_POD_NUM $>
+  schedulerName: volcano
+  policies:
+  - event: PodEvicted
+    action: RestartJob
+  - event: PodFailed
+    action: RestartJob
+  tasks:
+    - replicas: <$ PSERVER_NUM $>
+      name: pserver
+      template:
+        metadata:
+          labels:
+            paddle-job-pserver: fluid-ctr
+        spec:
+          imagePullSecrets:
+            - name: default-secret
+          containers:
+            - image: hub.baidubce.com/ctr/fleet-ctr:83
+              command:
+                - paddle_k8s
+                - start_fluid
+              imagePullPolicy: IfNotPresent
+              name: preserver
+              resources:
+                limits:
+                  cpu: 10
+                  memory: 30Gi
+                  ephemeral-storage: 10Gi
+                requests:
+                  cpu: 1
+                  memory: 100M
+                  ephemeral-storage: 1Gi
+              env:
+                - name: GLOG_v
+                  value: "0"
+                - name: GLOG_logtostderr
+                  value: "1"
+                - name: TOPOLOGY
+                  value: ""
+                - name: TRAINER_PACKAGE
+                  value: /workspace
+                - name: PADDLE_INIT_NICS
+                  value: eth2
+                - name: NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: POD_IP
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: status.podIP
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.name
+                - name: PADDLE_CURRENT_IP
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: status.podIP
+                - name: PADDLE_JOB_NAME
+                  value: fluid-ctr
+                - name: PADDLE_IS_LOCAL
+                  value: "0"
+                - name: PADDLE_TRAINERS_NUM
+                  value: "<$ TRAINER_NUM $>"
+                - name: PADDLE_PSERVERS_NUM
+                  value: "<$ PSERVER_NUM $>"
+                - name: FLAGS_rpc_deadline
+                  value: "36000000"
+                - name: ENTRY
+                  value: cd workspace && python3 train_with_mlflow.py slot.conf
+                - name: PADDLE_PORT
+                  value: "30240"
+                - name: HDFS_ADDRESS
+                  value: "<$ HDFS_ADDRESS $>"
+                - name: HDFS_UGI
+                  value: "<$ HDFS_UGI $>"
+                - name: START_DATE_HR
+                  value: <$ START_DATE_HR $>
+                - name: END_DATE_HR
+                  value: <$ END_DATE_HR $>
+                - name: DATASET_PATH
+                  value: "<$ DATASET_PATH $>"
+                - name: SPARSE_DIM
+                  value: "<$ SPARSE_DIM $>"
+                - name: PADDLE_TRAINING_ROLE
+                  value: PSERVER
+                - name: TRAINING_ROLE
+                  value: PSERVER
+          restartPolicy: OnFailure
+ 
+    - replicas: <$ TRAINER_NUM $>
+      policies:
+      - event: TaskCompleted
+        action: CompleteJob
+      name: trainer
+      template:
+        metadata:
+          labels:
+            paddle-job: fluid-ctr
+            app: mlflow
+        spec:
+          imagePullSecrets:
+            - name: default-secret
+          containers:
+            - image: hub.baidubce.com/ctr/fleet-ctr:83
+              command:
+                - paddle_k8s
+                - start_fluid              
+              imagePullPolicy: IfNotPresent
+              name: trainer
+              resources:
+                limits:
+                  cpu: 10
+                  memory: 30Gi
+                  ephemeral-storage: 10Gi
+                requests:
+                  cpu: 1
+                  memory: 100M
+                  ephemeral-storage: 10Gi
+              env:
+                - name: GLOG_v
+                  value: "0"
+                - name: GLOG_logtostderr
+                  value: "1"
+                - name: TRAINER_PACKAGE
+                  value: /workspace
+                - name: PADDLE_INIT_NICS
+                  value: eth2
+                - name: CPU_NUM
+                  value: "2"
+                - name: NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: POD_IP
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: status.podIP
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.name
+                - name: PADDLE_CURRENT_IP
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: status.podIP
+                - name: PADDLE_JOB_NAME
+                  value: fluid-ctr
+                - name: PADDLE_IS_LOCAL
+                  value: "0"
+                - name: FLAGS_rpc_deadline
+                  value: "36000000"
+                - name: PADDLE_PSERVERS_NUM
+                  value: "2"
+                - name: PADDLE_TRAINERS_NUM
+                  value: "2"
+                - name: PADDLE_PORT
+                  value: "30240"
+                - name: PADDLE_TRAINING_ROLE
+                  value: TRAINER
+                - name: TRAINING_ROLE
+                  value: TRAINER
+                - name: HDFS_ADDRESS
+                  value: "<$ HDFS_ADDRESS $>"
+                - name: HDFS_UGI
+                  value: "<$ HDFS_UGI $>"
+                - name: START_DATE_HR
+                  value: <$ START_DATE_HR $>
+                - name: END_DATE_HR
+                  value: <$ END_DATE_HR $>
+                - name: DATASET_PATH
+                  value: "<$ DATASET_PATH $>"
+                - name: SPARSE_DIM
+                  value: "<$ SPARSE_DIM $>"
+                - name: JAVA_HOME
+                  value: /usr/local/jdk1.8.0_231
+                - name: HADOOP_HOME
+                  value: /usr/local/hadoop-2.8.5
+                - name: PATH
+                  value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk1.8.0_231/bin:/usr/local/hadoop-2.8.5/bin:/Python-3.7.0
+                - name: ENTRY
+                  value: cd workspace  && (bash mlflow_run.sh &) && python3 train_with_mlflow.py slot.conf 
+          restartPolicy: OnFailure
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mlflow
+spec:
+  type: LoadBalancer
+  ports:
+    - name: mlflow
+      port: 8111
+      targetPort: 8111
+  selector:
+    app: mlflow
+
