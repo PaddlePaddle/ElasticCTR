@@ -1,4 +1,3 @@
-<img src='docs/source/_static/FL-logo.png' width = "400" height = "160">
 
 # ElasticCTR
 
