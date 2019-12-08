@@ -1,6 +1,6 @@
-# ELASTIC CTR 2.0
+# ElasticCTR 2.0
 
-Elastic CTR 2.0是百度云分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
+ElasticCTR 2.0是百度云分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
 
 * [1. 总体概览](#head1)
 * [2. 配置集群](#head2)
@@ -14,32 +14,18 @@ Elastic CTR 2.0是百度云分布式训练CTR预估任务和Serving流程一键�
 
 1.快速部署
 
-整体方案在k8s环境一键部署，可快速搭建与验证效果
+ElasticCTR当前提供的方案是基于百度云的Kubernetes集群进行部署，用户可以很容易扩展到其他原生的Kubernetes环境运行ElasticCTR。
   
 2.高性能
 
-基于Paddle Fleet API的大规模分布式高速训练，工业级稀疏参数Serving组件，高并发条件下单位时间吞吐总量是redis的13倍，训练资源弹性伸缩
+ElasticCTR采用PaddlePaddle提供的全异步分布式训练方式，在保证模型训练效果的前提下，近乎线性的扩展能力可以大幅度节省训练资源。在线服务方面，ElasticCTR采用Paddle Serving中高吞吐、低延迟的稀疏参数预估引擎，高并发条件下是常见开源组件吞吐量的10倍以上。
 
 3.可定制
 
-用户可以自定义配置文件，支持在线训练与离线训练以及训练数据可视化，支持在HDFS上存储数据。Elastic CTR使用完全开源的软件栈，用户可以进行二次开发
+用户可以通过统一的配置文件，修改训练中的训练方式和基本配置，包括在离线训练方式、训练过程可视化指标、HDFS上的存储配置等。除了通过修改统一配置文件进行训练任务配置外，ElasticCTR采用全开源软件栈，方便用户进行快速的二次开发和改造。底层的Kubernetes、Volcano可以轻松实现对上层任务的灵活调度策略；基于PaddlePaddle的灵活组网能力、飞桨的分布式训练引擎Fleet和远程预估服务Paddle Serving，用户可以对训练模型、并行训练的模式、远程预估服务进行快速迭代；MLFlow提供的训练任务可视化能力，用户可以快速增加系统监控需要的各种指标。
 
 
-本方案整体结构如下图所示：
-![elastic.png](https://github.com/suoych/WebChat/raw/master/overview_v2.png)
-其中各个模块的介绍如下：
-- Client: CTR预估任务的客户端，训练前用户可以上传自定义的配置文件，预测时可以发起预测请求
-- file server: 接收用户上传的配置文件，存储模型供Paddle Serving和Cube使用。
-- trainer/pserver: 训练环节采用PaddlePaddle parameter server模式，对应trainer和pserver角色。分布式训练使用volcano做批量任务管理工具。
-- MLFlow: 训练任务的可视化模块，用户可以直观地查看训练情况。
-- HDFS:  用于用户存储数据。训练完成后产出的模型文件，也会在HDFS存储。
-- cube-transfer: 负责监控上游训练任务产出的模型文件，有新的模型产出便拉取到本地，并调用cube-builder构建cube字典文件；通知cube-agent节点拉取最新的字典文件，并维护各个cube-server上版本一致性。
-- cube-builder: 负责将训练作业产出的模型文件转换成可以被cube-server加载的字典文件。字典文件具有特定的数据结构，针对尺寸和内存中访问做了高度优化。
-- Cube-Server: 提供分片kv读写能力的服务节点。
-- Cube-agent: 与cube-server同机部署，接收cube-transfer下发的字典文件更新命令，拉取数据到本地，通知cube-server进行更新。
-- Paddle Serving: 加载CTR预估任务模型ProgramDesc和dense参数，提供预测服务。
-
-以上组件串联完成从训练到预测部署的所有流程。本项目所提供的一键部署脚本elastic-control.sh可一键部署上述所有组件。用户可以参考本部署方案，将基于PaddlePaddle的分布式训练和Serving应用到业务环境。
+本方案整体结构请参照这篇文章 [ElasticCTR架构](elasticctr_arch.md)
 
 ## <span id='head2'>2. 配置集群</span>
 
