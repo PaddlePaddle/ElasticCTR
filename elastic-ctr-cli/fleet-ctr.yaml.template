@@ -21,7 +21,7 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:83
+            - image: hub.baidubce.com/ctr/fleet-ctr:89
               command:
                 - paddle_k8s
                 - start_fluid
@@ -113,7 +113,7 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:83
+            - image: hub.baidubce.com/ctr/fleet-ctr:89
               command:
                 - paddle_k8s
                 - start_fluid              
@@ -196,18 +196,3 @@ spec:
                 - name: ENTRY
                   value: cd workspace  && (bash mlflow_run.sh &) && python3 train_with_mlflow.py slot.conf 
           restartPolicy: OnFailure
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: mlflow
-spec:
-  type: LoadBalancer
-  ports:
-    - name: mlflow
-      port: 8111
-      targetPort: 8111
-  selector:
-    app: mlflow
-

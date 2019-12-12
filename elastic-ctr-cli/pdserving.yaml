@@ -7,8 +7,8 @@ metadata:
 spec:
   containers:
   - name: paddleserving
-    image: hub.baidubce.com/ctr/paddleserving:test_elastic_ctr_1 
-    #image: hub.baidubce.com/ctr/paddleserving:latest
+    #image: hub.baidubce.com/ctr/paddleserving:test_elastic_ctr_1 
+    image: hub.baidubce.com/ctr/paddleserving:latest
     workingDir: /serving
     command: ['/bin/bash']
     args: ['run.sh']

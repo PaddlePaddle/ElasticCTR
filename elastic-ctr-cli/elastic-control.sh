@@ -203,7 +203,7 @@ function generate_cube_yaml()
         echo "spec:"
         echo "  containers:"
         echo "  - name: cube-transfer"
-        echo "    image: hub.baidubce.com/ctr/cube-transfer:v1"
+        echo "    image: hub.baidubce.com/ctr/cube-transfer:v2"
         echo "    workingDir: /"
         echo "    env:"
         echo "      - name: POD_IP"
@@ -383,6 +383,9 @@ function apply()
         kubectl delete jobs.batch.volcano.sh fleet-ctr-demo
     fi
     kubectl apply -f fleet-ctr.yaml
+    python3 listen.py &
+    echo "waiting for mlflow..."
+    python3 service.py  
     return
 }
 

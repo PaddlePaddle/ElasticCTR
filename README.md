@@ -35,8 +35,12 @@ ElasticCTR采用PaddlePaddle提供的全异步分布式训练方式，在保证�
 
 ## <span id='head3'>3. 一键部署教程</span>
 
-您可以使用我们提供的脚本elastic-control.sh来完成部署，脚本的使用方式如下：
+您可以使用我们提供的脚本elastic-control.sh来完成部署，在运行脚本前，请确保您的机器装有python3并通过pip安装了mlflow，安装mlflow的命令如下：
+```bash
+python3 -m pip install mlflow -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+脚本的使用方式如下：
+```bash
 bash elastic-control.sh [COMMAND] [OPTIONS]
 ```
 其中可选的命令(COMMAND)如下：
@@ -84,12 +88,14 @@ bash elastic-control.sh -l
 ```
 2.mlflow可视化界面
 
-注意：该方法要求客户端机器可以使用浏览器
+注意：为了正常预览，请确保您本机的8111端口未被占用
 
-在训练过程中，用户可以输入以下指令后用浏览器访问127.0.0.1:8111查看训练情况界面
+在训练过程中，用户还可以通过mlflow的可视化界面来追踪训练进度，当屏幕上有如下输出后，
 ```bash
-kubectl port-forward fleet-ctr-demo-trainer-0 8111:8111
+mlflow ready!
 ```
+用户可以用本机的浏览器访问127.0.0.1:8111查看训练情况界面。如果本机有公网ip且8111端口开放，那么用户可以在任何机器上用浏览器访问${external_ip}:8111 查看训练情况界面
+
 可以看到页面显示效果如下所示：
 ![elastic.png](https://github.com/suoych/WebChat/raw/master/MacHi%202019-11-25%2014-19-30.png)
 ![dashboard.png](https://github.com/suoych/WebChat/raw/master/MacHi%202019-11-25%2014-18-32.png)
