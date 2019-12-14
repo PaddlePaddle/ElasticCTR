@@ -402,7 +402,7 @@ PSERVER=2
 DATA_PATH="/app"
 SLOT_CONF="./slot.conf"
 VERBOSE=0
-DATA_CONF_PATH="data.config"
+DATA_CONF_PATH="./data.config"
 source $DATA_CONF_PATH
 
 # Parse arguments

@@ -21,7 +21,7 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:89
+            - image: hub.baidubce.com/ctr/fleet-ctr:90
               command:
                 - paddle_k8s
                 - start_fluid
@@ -113,7 +113,7 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:89
+            - image: hub.baidubce.com/ctr/fleet-ctr:90
               command:
                 - paddle_k8s
                 - start_fluid              
