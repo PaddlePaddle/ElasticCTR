@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: file-server
-    image: hub.baidubce.com/ctr/file-server:hdfs9
+    image: hub.baidubce.com/ctr/file-server:hdfs14
     ports:
     - containerPort: 8080
     command: ['bash']
