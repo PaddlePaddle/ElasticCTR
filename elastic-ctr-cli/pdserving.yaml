@@ -5,19 +5,22 @@ metadata:
   labels:
     app: paddleserving
 spec:
-  containers:
-  - name: paddleserving
-    #image: hub.baidubce.com/ctr/paddleserving:test_elastic_ctr_1 
-    image: hub.baidubce.com/ctr/paddleserving:latest
-    workingDir: /serving
-    command: ['/bin/bash']
-    args: ['run.sh']
-    #command: ['sleep']
-    #args: ['1000000']
-    ports: 
-    - containerPort: 8010
-      name: serving
-
+  replicas: 1
+  template:
+    metadata:
+      name: paddleserving
+      labels:
+        app: paddleserving
+    spec:
+      containers:
+      - name: paddleserving
+        image: hub.baidubce.com/ctr/paddleserving:latest
+        workingDir: /serving
+        command: ['/bin/bash']
+        args: ['run.sh']
+        ports: 
+        - containerPort: 8010
+          name: serving
 ---
 apiVersion: v1
 kind: Service
