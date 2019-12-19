@@ -1,4 +1,3 @@
-
 # ElasticCTR
 
 ElasticCTR是百度云分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
@@ -30,7 +29,7 @@ ElasticCTR采用PaddlePaddle提供的全异步分布式训练方式，在保证�
 
 ## <span id='head2'>2. 配置集群</span>
 
-运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。
+运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。此外，Elastic CTR还支持在其他云上部署，可以参考以下两篇文档[华为云创建k8s集群](huawei_k8s.md)，[aws创建k8s集群](aws_k8s.md)
 
 
 ## <span id='head3'>3. 一键部署教程</span>
@@ -111,9 +110,6 @@ bash elastic-control.sh -c
 ```
 并按照屏幕上打出的提示继续执行即可进行预测，结果会打印在标准输出
 ![infer_help.png](https://github.com/suoych/WebChat/raw/master/infer_help.png)
-
-
-
 
 
 
