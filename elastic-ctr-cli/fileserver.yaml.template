@@ -46,6 +46,8 @@ spec:
           value: /usr/local/hadoop-2.8.5
         - name: HADOOP_HOME
           value: /usr/local/hadoop-2.8.5
+        - name: DATASET_PATH
+          value: "<$ DATASET_PATH $>"
         - name: HDFS_ADDRESS
           value: "<$ HDFS_ADDRESS $>"
         - name: HDFS_UGI
