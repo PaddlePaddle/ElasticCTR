@@ -236,8 +236,10 @@ function generate_fileserver_yaml()
     else
         hdfs_address=$1
         hdfs_ugi=$2
+        dataset_path=$3
         sed -e "s#<$ HDFS_ADDRESS $>#$hdfs_address#g" \
             -e "s#<$ HDFS_UGI $>#$hdfs_ugi#g" \
+            -e "s#<$ DATASET_PATH $>#$dataset_path#g" \
             fileserver.yaml.template > fileserver.yaml
         echo "File server yaml written to fileserver.yaml"
     fi  
@@ -329,7 +331,7 @@ function config_resource()
          "HDFS_ADDRESS=$HDFS_ADDRESS HDFS_UGI=$HDFS_UGI START_DATE_HR=$START_DATE_HR END_DATE_HR=$END_DATE_HR "\
          "SPARSE_DIM=$SPARSE_DIM DATASET_PATH=$DATASET_PATH "
     generate_cube_yaml $CUBE || die "config_resource: generate_cube_yaml failed"
-    generate_fileserver_yaml $HDFS_ADDRESS $HDFS_UGI || die "config_resource: generate_fileserver_yaml failed"
+    generate_fileserver_yaml $HDFS_ADDRESS $HDFS_UGI $DATASET_PATH || die "config_resource: generate_fileserver_yaml failed"
     generate_yaml $PSERVER $TRAINER $CPU $MEM $DATA_PATH $HDFS_ADDRESS $HDFS_UGI $START_DATE_HR $END_DATE_HR $SPARSE_DIM $DATASET_PATH || die "config_resource: generate_yaml failed"
     upload_slot_conf $SLOT_CONF || die "config_resource: upload_slot_conf failed"
     return 0
