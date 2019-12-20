@@ -366,8 +366,12 @@ function log()
     echo ""
     echo "Padddle Serving Log:"
     serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
-    kubectl logs ${serving_pod} | grep INFO > paddleserving.log
- 
+    kubectl logs ${serving_pod} | grep __INFO__ > paddleserving.log
+    if [ -f paddleserving.log ]; then
+        tail -n 20 paddleserving.log
+    else
+        echo "PaddleServing Log Has not been generated"
+    fi
 }
 
 datafile_config()
