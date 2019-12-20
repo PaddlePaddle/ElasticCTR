@@ -347,7 +347,8 @@ function log()
         echo "Trainer Log Has not been generated"
     fi
     echo "\nFile Server Log:"
-    kubectl logs file-server | grep __main__ > file-server.log
+    file_server_pod=$(kubectl get po | grep file-server | awk {'print $1'})
+    kubectl logs ${file_server_pod} | grep __main__ > file-server.log
     if [ -f file-server.log ]; then
         tail -n 20 file-server.log
     else
@@ -361,7 +362,8 @@ function log()
         echo "Cube Transfer Log Has not been generated"
     fi
     echo "\nPadddle Serving Log:"
-    kubectl logs paddleserving | grep INFO > paddleserving.log
+    serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
+    kubectl logs ${serving_pod} | grep INFO > paddleserving.log
  
 }
 
