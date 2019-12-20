@@ -377,6 +377,7 @@ datafile_config()
 
 function apply()
 {
+    echo "Waiting for pod..."
     check_tools kubectl 
     install_volcano
     kubectl get pod | grep cube | awk {'print $1'} | xargs kubectl delete pod >/dev/null 2>&1
