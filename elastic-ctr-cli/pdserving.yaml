@@ -15,6 +15,7 @@ spec:
       containers:
       - name: paddleserving
         image: hub.baidubce.com/ctr/paddleserving:latest
+        imagePullPolicy: Always
         workingDir: /serving
         command: ['/bin/bash']
         args: ['run.sh']
