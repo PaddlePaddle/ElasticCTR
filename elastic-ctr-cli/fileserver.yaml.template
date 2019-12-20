@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: file-server
-        image: hub.baidubce.com/ctr/file-server:hdfs14
+        image: hub.baidubce.com/ctr/file-server:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         command: ['bash']
