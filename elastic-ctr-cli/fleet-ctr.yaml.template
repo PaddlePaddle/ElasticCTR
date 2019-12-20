@@ -25,7 +25,7 @@ spec:
               command:
                 - paddle_k8s
                 - start_fluid
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: preserver
               resources:
                 limits:
@@ -117,7 +117,7 @@ spec:
               command:
                 - paddle_k8s
                 - start_fluid              
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: trainer
               resources:
                 limits:
