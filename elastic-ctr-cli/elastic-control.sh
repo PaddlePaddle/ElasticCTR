@@ -346,7 +346,8 @@ function log()
     else
         echo "Trainer Log Has not been generated"
     fi
-    echo "\nFile Server Log:"
+    echo ""
+    echo "File Server Log:"
     file_server_pod=$(kubectl get po | grep file-server | awk {'print $1'})
     kubectl logs ${file_server_pod} | grep __main__ > file-server.log
     if [ -f file-server.log ]; then
@@ -354,14 +355,16 @@ function log()
     else
         echo "File Server Log Has not been generated"
     fi
-    echo "\nCube Transfer Log:"
+    echo ""
+    echo "Cube Transfer Log:"
     kubectl logs cube-transfer | grep "all reload ok" > cube-transfer.log
     if [ -f cube-transfer.log ]; then
         tail -n 20 cube-transfer.log
     else
         echo "Cube Transfer Log Has not been generated"
     fi
-    echo "\nPadddle Serving Log:"
+    echo ""
+    echo "Padddle Serving Log:"
     serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
     kubectl logs ${serving_pod} | grep INFO > paddleserving.log
  
@@ -374,7 +377,7 @@ datafile_config()
 
 function apply()
 {
-    check_tools kubectl
+    check_tools kubectl 
     install_volcano
     kubectl get pod | grep cube | awk {'print $1'} | xargs kubectl delete pod >/dev/null 2>&1
     kubectl get pod | grep paddleserving | awk {'print $1'} | xargs kubectl delete pod >/dev/null 2>&1    
