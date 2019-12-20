@@ -14,8 +14,8 @@ def net_is_used(port, ip='0.0.0.0'):
         #print('%s:%d is unused' % (ip, port))
         return False
 
-os.system("ps -ef | grep mlflow | awk {'print $2'} | xargs kill -9 >/dev/null 2>&1")
-os.system("ps -ef | grep gunicorn | awk {'print $2'} | xargs kill -9 >/dev/null 2>&1")
+os.system("ps -f | grep mlflow | awk {'print $2'} | xargs kill -9 >/dev/null 2>&1")
+os.system("ps -f | grep gunicorn | awk {'print $2'} | xargs kill -9 >/dev/null 2>&1")
 
 while True:
     if os.path.exists("./mlruns") and not net_is_used(8111):
