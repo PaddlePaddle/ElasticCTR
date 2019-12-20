@@ -230,7 +230,7 @@ function generate_fileserver_yaml()
 {
     check_tools sed
     check_files fileserver.yaml.template
-    if [ $# -ne 2 ]; then
+    if [ $# -ne 3 ]; then
         echo "Invalid argument to function generate_fileserver_yaml"
         return -1
     else
