@@ -203,7 +203,7 @@ function generate_cube_yaml()
         echo "spec:"
         echo "  containers:"
         echo "  - name: cube-transfer"
-        echo "    image: hub.baidubce.com/ctr/cube-transfer:v1"
+        echo "    image: hub.baidubce.com/ctr/cube-transfer:v2"
         echo "    workingDir: /"
         echo "    env:"
         echo "      - name: POD_IP"
@@ -230,14 +230,16 @@ function generate_fileserver_yaml()
 {
     check_tools sed
     check_files fileserver.yaml.template
-    if [ $# -ne 2 ]; then
+    if [ $# -ne 3 ]; then
         echo "Invalid argument to function generate_fileserver_yaml"
         return -1
     else
         hdfs_address=$1
         hdfs_ugi=$2
+        dataset_path=$3
         sed -e "s#<$ HDFS_ADDRESS $>#$hdfs_address#g" \
             -e "s#<$ HDFS_UGI $>#$hdfs_ugi#g" \
+            -e "s#<$ DATASET_PATH $>#$dataset_path#g" \
             fileserver.yaml.template > fileserver.yaml
         echo "File server yaml written to fileserver.yaml"
     fi  
@@ -329,7 +331,7 @@ function config_resource()
          "HDFS_ADDRESS=$HDFS_ADDRESS HDFS_UGI=$HDFS_UGI START_DATE_HR=$START_DATE_HR END_DATE_HR=$END_DATE_HR "\
          "SPARSE_DIM=$SPARSE_DIM DATASET_PATH=$DATASET_PATH "
     generate_cube_yaml $CUBE || die "config_resource: generate_cube_yaml failed"
-    generate_fileserver_yaml $HDFS_ADDRESS $HDFS_UGI || die "config_resource: generate_fileserver_yaml failed"
+    generate_fileserver_yaml $HDFS_ADDRESS $HDFS_UGI $DATASET_PATH || die "config_resource: generate_fileserver_yaml failed"
     generate_yaml $PSERVER $TRAINER $CPU $MEM $DATA_PATH $HDFS_ADDRESS $HDFS_UGI $START_DATE_HR $END_DATE_HR $SPARSE_DIM $DATASET_PATH || die "config_resource: generate_yaml failed"
     upload_slot_conf $SLOT_CONF || die "config_resource: upload_slot_conf failed"
     return 0
@@ -344,23 +346,32 @@ function log()
     else
         echo "Trainer Log Has not been generated"
     fi
-    echo "\nFile Server Log:"
-    kubectl logs file-server | grep __main__ > file-server.log
+    echo ""
+    echo "File Server Log:"
+    file_server_pod=$(kubectl get po | grep file-server | awk {'print $1'})
+    kubectl logs ${file_server_pod} | grep __main__ > file-server.log
     if [ -f file-server.log ]; then
         tail -n 20 file-server.log
     else
         echo "File Server Log Has not been generated"
     fi
-    echo "\nCube Transfer Log:"
+    echo ""
+    echo "Cube Transfer Log:"
     kubectl logs cube-transfer | grep "all reload ok" > cube-transfer.log
     if [ -f cube-transfer.log ]; then
         tail -n 20 cube-transfer.log
     else
         echo "Cube Transfer Log Has not been generated"
     fi
-    echo "\nPadddle Serving Log:"
-    kubectl logs paddleserving | grep INFO > paddleserving.log
- 
+    echo ""
+    echo "Padddle Serving Log:"
+    serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
+    kubectl logs ${serving_pod} | grep __INFO__ > paddleserving.log
+    if [ -f paddleserving.log ]; then
+        tail -n 20 paddleserving.log
+    else
+        echo "PaddleServing Log Has not been generated"
+    fi
 }
 
 datafile_config()
@@ -370,7 +381,8 @@ datafile_config()
 
 function apply()
 {
-    check_tools kubectl
+    echo "Waiting for pod..."
+    check_tools kubectl 
     install_volcano
     kubectl get pod | grep cube | awk {'print $1'} | xargs kubectl delete pod >/dev/null 2>&1
     kubectl get pod | grep paddleserving | awk {'print $1'} | xargs kubectl delete pod >/dev/null 2>&1    
@@ -383,6 +395,9 @@ function apply()
         kubectl delete jobs.batch.volcano.sh fleet-ctr-demo
     fi
     kubectl apply -f fleet-ctr.yaml
+    python3 listen.py &
+    echo "waiting for mlflow..."
+    python3 service.py  
     return
 }
 
@@ -399,7 +414,7 @@ PSERVER=2
 DATA_PATH="/app"
 SLOT_CONF="./slot.conf"
 VERBOSE=0
-DATA_CONF_PATH="data.config"
+DATA_CONF_PATH="./data.config"
 source $DATA_CONF_PATH
 
 # Parse arguments

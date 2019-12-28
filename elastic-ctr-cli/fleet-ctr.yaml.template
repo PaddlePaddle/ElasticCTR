@@ -21,11 +21,11 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:83
+            - image: hub.baidubce.com/ctr/fleet-ctr:latest
               command:
                 - paddle_k8s
                 - start_fluid
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: preserver
               resources:
                 limits:
@@ -113,11 +113,11 @@ spec:
           imagePullSecrets:
             - name: default-secret
           containers:
-            - image: hub.baidubce.com/ctr/fleet-ctr:83
+            - image: hub.baidubce.com/ctr/fleet-ctr:latest
               command:
                 - paddle_k8s
                 - start_fluid              
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: trainer
               resources:
                 limits:
@@ -194,20 +194,5 @@ spec:
                 - name: PATH
                   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk1.8.0_231/bin:/usr/local/hadoop-2.8.5/bin:/Python-3.7.0
                 - name: ENTRY
-                  value: cd workspace  && (bash mlflow_run.sh &) && python3 train_with_mlflow.py slot.conf 
+                  value: cd workspace && python3 train_with_mlflow.py slot.conf 
           restartPolicy: OnFailure
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: mlflow
-spec:
-  type: LoadBalancer
-  ports:
-    - name: mlflow
-      port: 8111
-      targetPort: 8111
-  selector:
-    app: mlflow
-

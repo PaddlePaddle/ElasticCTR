@@ -1,28 +1,61 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1beta1
+kind: Deployment
 metadata:
   name: file-server
   labels:
     app: file-server
 spec:
-  containers:
-  - name: file-server
-    image: hub.baidubce.com/ctr/file-server:hdfs7
-    ports:
-    - containerPort: 8080
-    command: ['bash']
-    args: ['run.sh']
-    env:
-    - name: JAVA_HOME
-      value: /usr/local/jdk1.8.0_231
-    - name: HADOOP_HOME
-      value: /usr/local/hadoop-2.8.5
-    - name: HDFS_ADDRESS
-      value: "<$ HDFS_ADDRESS $>"
-    - name: HDFS_UGI
-      value: "<$ HDFS_UGI $>"
-    - name: PATH
-      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk1.8.0_231/bin:/usr/local/hadoop-2.8.5/bin:/Python-3.7.0:/node-v12.13.1-linux-x64/bin
+  replicas: 1
+  template:
+    metadata:
+      name: file-server
+      labels:
+        app: file-server
+    spec:
+      containers:
+      - name: file-server
+        image: hub.baidubce.com/ctr/file-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        command: ['bash']
+        args: ['run.sh']
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: PADDLE_CURRENT_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: JAVA_HOME
+          value: /usr/local/jdk1.8.0_231
+        - name: HADOOP_HOME
+          value: /usr/local/hadoop-2.8.5
+        - name: HADOOP_HOME
+          value: /usr/local/hadoop-2.8.5
+        - name: DATASET_PATH
+          value: "<$ DATASET_PATH $>"
+        - name: HDFS_ADDRESS
+          value: "<$ HDFS_ADDRESS $>"
+        - name: HDFS_UGI
+          value: "<$ HDFS_UGI $>"
+        - name: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk1.8.0_231/bin:/usr/local/hadoop-2.8.5/bin:/Python-3.7.0:/node-v12.13.1-linux-x64/bin
+
 ---
 kind: Service
 apiVersion: v1

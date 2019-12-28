@@ -21,6 +21,7 @@ import google.protobuf.text_format as text_format
 import paddle.fluid.proto.framework_pb2 as framework_pb2
 import paddle.fluid.core as core
 import six
+import subprocess as sp
 
 inference_path = sys.argv[2]+ '/inference_only'
 feature_names = []
@@ -37,8 +38,8 @@ sparse_input_ids = [
 label = fluid.layers.data(
     name='label', shape=[1], dtype='int64')
 
-sparse_feature_dim = int(os.environ('SPARSE_DIM'))
-dataset_prefix
+sparse_feature_dim = int(os.environ['SPARSE_DIM'])
+dataset_prefix = os.environ['DATASET_PATH']
 embedding_size = 9
 
 current_date_hr = sys.argv[3]
