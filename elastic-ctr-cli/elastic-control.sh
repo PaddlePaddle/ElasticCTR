@@ -488,15 +488,15 @@ if [ $CMD = "config_resource" ]; then
         die "Invalid MEM Num, should be greater than 0 and less than 5."
     fi
 
-    if [ $PSERVER -lt 1] || [ $PSERVER -gt 9]; then
+    if [ $PSERVER -lt 1 ] || [ $PSERVER -gt 9 ]; then
         die "Invalid PSERVER Num, should be greater than 0 and less than 10."
     fi
 
-    if [ $TRAINER -lt 1] || [ $TRAINER -gt 9]; then
+    if [ $TRAINER -lt 1 ] || [ $TRAINER -gt 9 ]; then
         die "Invalid TRAINER Num, should be greater than 0 and less than 10."
     fi
 
-    if [ $CUBE -lt 0] && [ $CUBE -gt 9 ]; then
+    if [ $CUBE -lt 0 ] && [ $CUBE -gt 9 ]; then
         die "Invalid CUBE Num, should be greater than 0 and less than 10."
     fi
 fi
