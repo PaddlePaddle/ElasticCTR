@@ -496,7 +496,7 @@ if [ $CMD = "config_resource" ]; then
         die "Invalid TRAINER Num, should be greater than 0 and less than 10."
     fi
 
-    if ! grep '^[[:digit:]]*$' <<< "$CUBE" >> /dev/null || [ $CUBE -lt 0 ] || [ $CUBE -gt 9 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$CUBE" >> /dev/null || [ $CUBE -lt 1 ] || [ $CUBE -gt 9 ]; then
         die "Invalid CUBE Num, should be greater than 0 and less than 10."
     fi
 fi
