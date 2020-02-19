@@ -480,23 +480,23 @@ done
 
 if [ $CMD = "config_resource" ]; then
 
-    if [ $CPU -lt 1 ] || [ $CPU -gt 4 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$CPU" >> /dev/null || [ $CPU -lt 1 ] || [ $CPU -gt 4 ]; then
         die "Invalid CPU Num, should be greater than 0 and less than 5."
     fi
 
-    if [ $MEM -lt 1 ] || [ $MEM -gt 4 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$MEM" >> /dev/null || [ $MEM -lt 1 ] || [ $MEM -gt 4 ]; then
         die "Invalid MEM Num, should be greater than 0 and less than 5."
     fi
 
-    if [ $PSERVER -lt 1 ] || [ $PSERVER -gt 9 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$PSERVER" >> /dev/null || [ $PSERVER -lt 1 ] || [ $PSERVER -gt 9 ]; then
         die "Invalid PSERVER Num, should be greater than 0 and less than 10."
     fi
 
-    if [ $TRAINER -lt 1 ] || [ $TRAINER -gt 9 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$TRAINER" >> /dev/null || [ $TRAINER -lt 1 ] || [ $TRAINER -gt 9 ]; then
         die "Invalid TRAINER Num, should be greater than 0 and less than 10."
     fi
 
-    if [ $CUBE -lt 0 ] && [ $CUBE -gt 9 ]; then
+    if ! grep '^[[:digit:]]*$' <<< "$CUBE" >> /dev/null || [ $CUBE -lt 0 ] && [ $CUBE -gt 9 ]; then
         die "Invalid CUBE Num, should be greater than 0 and less than 10."
     fi
 fi
