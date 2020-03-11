@@ -14,6 +14,7 @@ def rewrite_yaml(path):
                 os.system(cmd)
 
 time.sleep(5)
+os.system("rm -rf ./mlruns >/dev/null 2>&1")
 while True:
     r = os.popen("kubectl get pod | grep fleet-ctr-demo-trainer-0 | awk {'print $3'}") 
     info = r.readlines()

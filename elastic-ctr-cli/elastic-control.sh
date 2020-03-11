@@ -364,14 +364,14 @@ function log()
         echo "Cube Transfer Log Has not been generated"
     fi
     echo ""
-    echo "Padddle Serving Log:"
-    serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
-    kubectl logs ${serving_pod} | grep __INFO__ > paddleserving.log
-    if [ -f paddleserving.log ]; then
-        tail -n 20 paddleserving.log
-    else
-        echo "PaddleServing Log Has not been generated"
-    fi
+    #echo "Padddle Serving Log:"
+    #serving_pod=$(kubectl get po | grep paddleserving | awk {'print $1'})
+    #kubectl logs ${serving_pod} | grep __INFO__ > paddleserving.log
+    #if [ -f paddleserving.log ]; then
+    #    tail -n 20 paddleserving.log
+    #else
+    #    echo "PaddleServing Log Has not been generated"
+    #fi
 }
 
 datafile_config()
@@ -395,9 +395,9 @@ function apply()
         kubectl delete jobs.batch.volcano.sh fleet-ctr-demo
     fi
     kubectl apply -f fleet-ctr.yaml
-    python3 listen.py &
-    echo "waiting for mlflow..."
-    python3 service.py  
+    # python3 listen.py &
+    # echo "waiting for mlflow..."
+    # python3 service.py  
     return
 }
 
@@ -406,7 +406,7 @@ function apply()
 ###############################################################################
 
 CMD=""
-CPU=4
+CPU=2
 MEM=4
 CUBE=2
 TRAINER=2
@@ -477,6 +477,30 @@ while true; do
             ;;
     esac
 done
+
+if [ $CMD = "config_resource" ]; then
+
+    if ! grep '^[[:digit:]]*$' <<< "$CPU" >> /dev/null || [ $CPU -lt 1 ] || [ $CPU -gt 4 ]; then
+        die "Invalid CPU Num, should be greater than 0 and less than 5."
+    fi
+
+    if ! grep '^[[:digit:]]*$' <<< "$MEM" >> /dev/null || [ $MEM -lt 1 ] || [ $MEM -gt 4 ]; then
+        die "Invalid MEM Num, should be greater than 0 and less than 5."
+    fi
+
+    if ! grep '^[[:digit:]]*$' <<< "$PSERVER" >> /dev/null || [ $PSERVER -lt 1 ] || [ $PSERVER -gt 9 ]; then
+        die "Invalid PSERVER Num, should be greater than 0 and less than 10."
+    fi
+
+    if ! grep '^[[:digit:]]*$' <<< "$TRAINER" >> /dev/null || [ $TRAINER -lt 1 ] || [ $TRAINER -gt 9 ]; then
+        die "Invalid TRAINER Num, should be greater than 0 and less than 10."
+    fi
+
+    if ! grep '^[[:digit:]]*$' <<< "$CUBE" >> /dev/null || [ $CUBE -lt 1 ] || [ $CUBE -gt 9 ]; then
+        die "Invalid CUBE Num, should be greater than 0 and less than 10."
+    fi
+fi
+
 
 case $CMD in
 config_resource)
