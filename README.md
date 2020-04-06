@@ -29,7 +29,9 @@ ElasticREC采用PaddlePaddle提供的全异步分布式训练方式，在保证�
 
 ## <span id='head2'>2. 配置集群</span>
 
-运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。此外，Elastic CTR还支持在其他云上部署，可以参考以下两篇文档[华为云创建k8s集群](huawei_k8s.md)，[aws创建k8s集群](aws_k8s.md)
+运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。此外，Elastic CTR还支持在其他云上部署，可以参考以下两篇文档[华为云创建k8s集群](huawei_k8s.md)，[aws创建k8s集群](aws_k8s.md).
+
+准备好K8S集群之后，我们需要配置HDFS作为数据集的来源[HDFS配置教程](HDFS_TUTORIAL.md)
 
 
 ## <span id='head3'>3. 一键部署教程</span>
