@@ -56,6 +56,5 @@ Microsoft Word - ElasticCTR提测报告-0.docx
 执行
 `hdfs dfs -put * hdfs://$IP:9000/train_data/20200401`
 `$IP`就是先前到HDFS地址。
-这样，就在train_data下目录到20200401目录下存放了5个小时的训练集。
-
-20200401可以改动成任意一个日期。
+这样，就在train_data下目录到20200401目录下存放了5个小时的训练集。20200401可以改动成任意一个日期。
+在主页面的教程中，`data.config`文件就是用来现在配置的HDFS信息，日期信息会在这里被调用。
