@@ -70,6 +70,16 @@ $show $click $feasign0:$slot0 $feasign1:$slot1 $feasign2:$slot2......
 - **-f|--datafile**         数据路径文件，需要指明HDFS地址并指定起始与截止日期（截止日期可选）
 - **-s|--slot_conf**        特征槽位配置文件，请注意文件后缀必须为'.txt'
 
+以下是`data.config`文件，其中`START_DATE_HR`和`END_DATE_HR`就是我们在上一步配置HDFS的路径。
+```
+export HDFS_ADDRESS="hdfs://${IP}:9000" # HDFS地址
+export HDFS_UGI="root,i" # HDFS用户名密码
+export START_DATE_HR=20200401/00 # 训练集开始时间，代表2020年4月1日0点
+export END_DATE_HR=20200401/03 # 训练集结束时间，代表2020年4月1日3点
+export DATASET_PATH="/train_data" # 训练集在HDFS上的前缀
+export SPARSE_DIM="1000001" # 稀疏参数维度，可不动
+```
+
 脚本的使用示例如下：
 ```
 bash elastic-control.sh -r -u 4 -m 20 -t 2 -p 2 -b 5 -s slot.conf -f data.config
