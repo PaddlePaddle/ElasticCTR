@@ -51,7 +51,7 @@
 以上操作之后，HDFS 服务就启动完毕，接下来就创建流式训练的文件夹 `/train_data/`，使用命令 `hdfs dfs -mkdir hdfs://$IP:9000/train_data/`
 
 ## 复制Criteo数据集到HDFS
-接下来从 `https://paddle-serving.bj.bcebos.com/criteo_ctr_example/criteo_ctr_demo_model.tar.gz` 下载数据集，解压之后在criteo_demo下
+接下来从 `https://paddle-serving.bj.bcebos.com/criteo_ctr_example/criteo_demo.tar.gz` 下载数据集，解压之后在criteo_demo下
 执行
 `hdfs dfs -put * hdfs://$IP:9000/train_data/20200401`
 `$IP`就是先前到HDFS地址。
