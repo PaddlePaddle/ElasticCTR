@@ -34,28 +34,26 @@
 </configuration>
 ```
 
-Microsoft Word - ElasticCTR提测报告-0.docx
 
-此处 LOCAL_IP 推荐用内网的 IP，也就是在 ifconfig 下为 192.168 开头的 IP，在 K8S 当中也可以被访问 到。
+此处 `$LOCAL_IP` 推荐用内网的 IP，也就是在 ifconfig 下为 `192.168` 开头的 IP，在 K8S 当中也可以被访问 到。
 
-在 slave 文件下输入 root@127.0.0.1
+在 `slave` 文件下输入 `root@127.0.0.1`
 
-接下来配置无密码访问，首先要 ssh-keygen，各种回车之后，用 ssh-copy-id 命令把无密码访问配置到 127.0.0.1 localhost 0.0.0.0 几个 IP 地址。
+接下来配置无密码访问，首先要 `ssh-keygen`，无论提示什么全部回车数次之后，用 `ssh-copy-id` 命令把无密码访问配置到 `127.0.0.1` ,`localhost` ,`0.0.0.0` 几个 IP 地址。
 
-把/usr/local/hadoop-2.8.5/etc/hadoop 设置为 HADOOP_HOME
+把`/usr/local/hadoop-2.8.5/etc/hadoop` 设置为 `$HADOOP_HOME`
 
-再把$HADOOP_HOME/bin 放在 PATH 下。如果输入 hadoop 命令可以被执行，就执行 hadoop namenode format。
+再把`$HADOOP_HOME/bin` 放在 `$PATH` 下。如果输入 `hadoop` 命令可以被执行，就执行 `hadoop namenode format`。
 
-最后在/usr/local/hadoop-2.8.5/sbin 目录下运行 ，start-all.sh。
+最后在`/usr/local/hadoop-2.8.5/sbin` 目录下运行 ，`start-all.sh`。
 
 
-以上操作之后，HDFS 服务就启动完毕，接下来就创建流式训练的文件夹 /train_data/，使用命令 hdfs dfs -mkdir hdfs://$IP:9000/train_data/
+以上操作之后，HDFS 服务就启动完毕，接下来就创建流式训练的文件夹 `/train_data/`，使用命令 `hdfs dfs -mkdir hdfs://$IP:9000/train_data/`
 
 ## 复制Criteo数据集到HDFS
 接下来从 `https://paddle-elasticctr.bj.bcebos.com/criteo_dataset/criteo_demo.tar.gz` 下载数据集，解压之后在criteo_demo下
 执行
 `hdfs dfs -put * hdfs://$IP:9000/train_data/20200401`
 `$IP`就是先前到HDFS地址。
-这样，就在train_data下目录到20200401目录下存放了5个小时的训练集。
-
-20200401可以改动成任意一个日期。
+这样，就在train_data下目录到20200401目录下存放了5个小时的训练集。20200401可以改动成任意一个日期。
+在主页面的教程中，`data.config`文件就是用来现在配置的HDFS信息，日期信息会在这里被调用。

@@ -1,6 +1,6 @@
-# ElasticREC
+# ElasticCTR
 
-ElasticREC是分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
+ElasticCTR是分布式训练CTR预估任务和Serving流程一键部署的方案，用户只需配置数据源、样本格式即可完成一系列的训练与预测任务
 
 * [1. 总体概览](#head1)
 * [2. 配置集群](#head2)
@@ -14,22 +14,24 @@ ElasticREC是分布式训练CTR预估任务和Serving流程一键部署的方案
 
 1.快速部署
 
-ElasticREC当前提供的方案是基于百度云的Kubernetes集群进行部署，用户可以很容易扩展到其他原生的Kubernetes环境运行ElasticREC。
+ElasticCTR当前提供的方案是基于百度云的Kubernetes集群进行部署，用户可以很容易扩展到其他原生的Kubernetes环境运行ElasticCTR。
   
 2.高性能
 
-ElasticREC采用PaddlePaddle提供的全异步分布式训练方式，在保证模型训练效果的前提下，近乎线性的扩展能力可以大幅度节省训练资源。在线服务方面，ElasticREC采用Paddle Serving中高吞吐、低延迟的稀疏参数预估引擎，高并发条件下是常见开源组件吞吐量的10倍以上。
+ElasticCTR采用PaddlePaddle提供的全异步分布式训练方式，在保证模型训练效果的前提下，近乎线性的扩展能力可以大幅度节省训练资源。在线服务方面，ElasticCTR采用Paddle Serving中高吞吐、低延迟的稀疏参数预估引擎，高并发条件下是常见开源组件吞吐量的10倍以上。
 
 3.可定制
 
-用户可以通过统一的配置文件，修改训练中的训练方式和基本配置，包括在离线训练方式、训练过程可视化指标、HDFS上的存储配置等。除了通过修改统一配置文件进行训练任务配置外，ElasticREC采用全开源软件栈，方便用户进行快速的二次开发和改造。底层的Kubernetes、Volcano可以轻松实现对上层任务的灵活调度策略；基于PaddlePaddle的灵活组网能力、飞桨的分布式训练引擎Fleet和远程预估服务Paddle Serving，用户可以对训练模型、并行训练的模式、远程预估服务进行快速迭代；MLFlow提供的训练任务可视化能力，用户可以快速增加系统监控需要的各种指标。
+用户可以通过统一的配置文件，修改训练中的训练方式和基本配置，包括在离线训练方式、训练过程可视化指标、HDFS上的存储配置等。除了通过修改统一配置文件进行训练任务配置外，ElasticCTR采用全开源软件栈，方便用户进行快速的二次开发和改造。底层的Kubernetes、Volcano可以轻松实现对上层任务的灵活调度策略；基于PaddlePaddle的灵活组网能力、飞桨的分布式训练引擎Fleet和远程预估服务Paddle Serving，用户可以对训练模型、并行训练的模式、远程预估服务进行快速迭代；MLFlow提供的训练任务可视化能力，用户可以快速增加系统监控需要的各种指标。
 
 
 本方案整体结构请参照这篇文章 [ElasticCTR架构](elasticctr_arch.md)
 
 ## <span id='head2'>2. 配置集群</span>
 
-运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。此外，Elastic CTR还支持在其他云上部署，可以参考以下两篇文档[华为云创建k8s集群](huawei_k8s.md)，[aws创建k8s集群](aws_k8s.md)
+运行本方案前，需要用户已经搭建好k8s集群，并安装好volcano组件。k8s环境部署比较复杂，本文不涉及。百度智能云CCE容器引擎申请后即可使用，百度云上创建k8s的方法用户可以参考这篇文档[百度云创建k8s教程及使用指南](cluster_config.md)。此外，Elastic CTR还支持在其他云上部署，可以参考以下两篇文档[华为云创建k8s集群](huawei_k8s.md)，[aws创建k8s集群](aws_k8s.md).
+
+准备好K8S集群之后，我们需要配置HDFS作为数据集的来源[HDFS配置教程](HDFS_TUTORIAL.md)
 
 
 ## <span id='head3'>3. 一键部署教程</span>
