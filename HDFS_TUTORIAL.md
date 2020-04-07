@@ -34,7 +34,6 @@
 </configuration>
 ```
 
-Microsoft Word - ElasticCTR提测报告-0.docx
 
 此处 `$LOCAL_IP` 推荐用内网的 IP，也就是在 ifconfig 下为 `192.168` 开头的 IP，在 K8S 当中也可以被访问 到。
 
