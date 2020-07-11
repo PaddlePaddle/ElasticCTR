@@ -25,7 +25,14 @@ ElasticCTR采用PaddlePaddle提供的全异步分布式训练方式，在保证�
 用户可以通过统一的配置文件，修改训练中的训练方式和基本配置，包括在离线训练方式、训练过程可视化指标、HDFS上的存储配置等。除了通过修改统一配置文件进行训练任务配置外，ElasticCTR采用全开源软件栈，方便用户进行快速的二次开发和改造。底层的Kubernetes、Volcano可以轻松实现对上层任务的灵活调度策略；基于PaddlePaddle的灵活组网能力、飞桨的分布式训练引擎Fleet和远程预估服务Paddle Serving，用户可以对训练模型、并行训练的模式、远程预估服务进行快速迭代；MLFlow提供的训练任务可视化能力，用户可以快速增加系统监控需要的各种指标。
 
 
+
 本方案整体结构请参照这篇文章 [ElasticCTR架构](elasticctr_arch.md)
+
+<p align="center">
+    <br>
+<img src='doc/ElasticCTR.png' width = "800" height = "300">
+    <br>
+<p>
 
 ## <span id='head2'>2. 配置集群</span>
 
